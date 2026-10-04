@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tring Closing Dashboard - Pegadaian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0B5D3B;
+    --green-dark:#073D27;
+    --green-soft:#E4EFE9;
+    --gold:#C08A2E;
+    --gold-soft:#F5E9D2;
+    --bg:#F4F6F5;
+    --panel:#FFFFFF;
+    --ink:#182420;
+    --ink-soft:#63726B;
+    --ink-faint:#94A19B;
+    --line:#E4E8E5;
+    --danger:#B4432E;
+    --danger-soft:#F7E6E2;
+    --success:#1F7A4D;
+    --success-soft:#E3F1E8;
+    --warn:#B9782A;
+    --warn-soft:#FBEEDD;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(15,30,24,0.04), 0 8px 24px -12px rgba(15,30,24,0.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ text-decoration:none; color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{
+    display:grid;
+    grid-template-columns:250px 1fr;
+    min-height:100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar{
+    background:var(--green-dark);
+    color:#EAF3EE;
+    padding:22px 14px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:6px 10px 22px;
+    border-bottom:1px solid rgba(234,243,238,0.12);
+    margin-bottom:14px;
+  }
+  .brand .mark{
+    width:36px; height:36px;
+    border-radius:10px;
+    background:var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800;
+    color:#3A2A08;
+    font-size:16px;
+  }
+  .brand .name{
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    color:#fff;
+  }
+  .brand .sub{
+    font-size:11px;
+    color:#AEC7BC;
+    display:flex; align-items:center; gap:5px;
+    margin-top:2px;
+  }
+  .brand .sub::before{
+    content:""; width:6px; height:6px; border-radius:50%; background:#10B981;
+  }
+  nav.menu{ display:flex; flex-direction:column; gap:4px; flex:1; }
+  .nav-item{
+    display:flex; align-items:center; gap:11px;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:13.5px;
+    color:#CFE3D8;
+    cursor:pointer;
+    transition:background 0.12s ease, color 0.12s ease;
+  }
+  .nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:0.9; }
+  .nav-item:hover{ background:rgba(234,243,238,0.08); color:#fff; }
+  .nav-item.active{ background:#EAF3EE; color:var(--green-dark); font-weight:700; }
+  .nav-item.active svg{ opacity:1; color:var(--green-dark); }
+  .sidebar-foot{
+    border-top:1px solid rgba(234,243,238,0.12);
+    padding-top:14px;
+    font-size:11.5px;
+    color:#9BB9AC;
+    line-height:1.5;
+  }
+
+  /* MAIN */
+  .main{ min-width:0; }
+  .topbar{
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+    padding:14px 28px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .topbar h1{
+    font-size:17px;
+    font-weight:700;
+    margin:0;
+    white-space:nowrap;
+  }
+  .topbar-search{
+    flex:1;
+    max-width:440px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:8px 12px;
+  }
+  .topbar-search svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+  .topbar-search input{
+    border:none; outline:none; background:transparent;
+    font-size:13px; width:100%; color:var(--ink);
+  }
+  .topbar-right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .profile{
+    display:flex; align-items:center; gap:9px;
+    padding-left:14px;
+    border-left:1px solid var(--line);
+  }
+  .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background:var(--green); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:700;
+  }
+  .profile .who{ line-height:1.25; }
+  .profile .who .n{ font-size:13px; font-weight:700; }
+  .profile .who .r{ font-size:11px; color:var(--ink-soft); }
+
+  .content{ padding:26px 28px 60px; display:flex; flex-direction:column; gap:22px; max-width:1280px; margin:0 auto; }
+
+  /* stat cards */
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .stat-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .stat-card .top-row{
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .stat-card .label{ font-size:12px; font-weight:600; color:var(--ink-soft); }
+  .stat-card .value{ font-size:28px; font-weight:800; margin-top:6px; color:var(--ink); }
+  .stat-card .delta{ font-size:12px; margin-top:8px; display:flex; align-items:center; gap:4px; font-weight:600; }
+  .delta.up{ color:var(--success); }
+  .delta.down{ color:var(--danger); }
+  .stat-icon{
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stat-icon svg{ width:18px; height:18px; }
+  .stat-icon.green{ background:var(--green-soft); color:var(--green); }
+  .stat-icon.gold{ background:var(--gold-soft); color:var(--gold); }
+  .stat-icon.warn{ background:var(--warn-soft); color:var(--warn); }
+  .stat-icon.danger{ background:var(--danger-soft); color:var(--danger); }
+
+  /* Panels */
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+  }
+  .panel h2{
+    font-size:15.5px; font-weight:700; margin:0 0 4px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .panel h2 .badge{
+    font-size:10px; font-weight:800; letter-spacing:0.04em;
+    background:var(--gold-soft); color:#805813;
+    padding:3px 8px; border-radius:20px;
+  }
+  .panel .desc{ font-size:12.5px; color:var(--ink-soft); margin-bottom:16px; }
+
+  .ai-split-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;
+  }
+  .ai-bar-wrap{
+    background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:12px 14px;
+  }
+  .ai-bar-wrap .row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; color:var(--ink-soft); }
+  .ai-bar-wrap .row .n{ font-weight:700; color:var(--ink); }
+  .bar-track{
+    height:8px; border-radius:20px; background:var(--line); overflow:hidden;
+  }
+  .bar-fill.opened{ background:var(--success); height:100%; transition:width 0.4s ease; }
+  .bar-fill.notopened{ background:var(--warn); height:100%; transition:width 0.4s ease; }
+
+  .ai-insight-text{
+    background:var(--green-soft);
+    border-left:4px solid var(--green);
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:13px;
+    line-height:1.6;
+    color:var(--green-dark);
+    margin-bottom:16px;
+  }
+  .ai-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  .btn{
+    border-radius:10px;
+    padding:8px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--ink);
+    display:inline-flex; align-items:center; gap:6px;
+    transition:all 0.15s ease;
+  }
+  .btn:hover{ background:var(--bg); }
+  .btn.primary{ background:var(--green); border-color:var(--green); color:#fff; }
+  .btn.primary:hover{ background:var(--green-dark); }
+  .btn.ghost-warn{ color:var(--warn); border-color:var(--warn-soft); background:var(--warn-soft); }
+  .btn.ghost-success{ color:var(--success); border-color:var(--success-soft); background:var(--success-soft); }
+  .btn.sm{ padding:6px 11px; font-size:12px; border-radius:8px; }
+
+  /* table panel */
+  .table-panel{ padding:22px 24px 12px; }
+  .table-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:16px; flex-wrap:wrap; gap:12px;
+  }
+  .table-controls{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .table-search{
+    display:flex; align-items:center; gap:7px;
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:8px 12px; min-width:220px;
+  }
+  .table-search svg{ width:15px; height:15px; color:var(--ink-faint); }
+  .table-search input{ border:none; outline:none; background:transparent; font-size:13px; width:100%; color:var(--ink); }
+  select.filter-select{
+    border:1px solid var(--line); background:var(--bg); border-radius:10px;
+    padding:8px 12px; font-size:12.5px; color:var(--ink); outline:none; font-family:inherit;
+  }
+
+  .table-wrap{ border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  table{ width:100%; border-collapse:collapse; text-align:left; }
+  thead th{
+    font-size:11.5px; letter-spacing:0.02em;
+    color:var(--ink-soft); font-weight:700;
+    padding:11px 14px; background:var(--bg); border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:12px 14px; font-size:13px; border-bottom:1px solid var(--line);
+    vertical-align:middle;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr:hover{ background:#FAFBFA; }
+  .cust-name{ font-weight:700; color:var(--ink); }
+  .cust-sub{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
+
+  .pill{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px;
+    cursor:pointer; user-select:none;
+  }
+  .pill.dot::before{ content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .pill.success{ background:var(--success-soft); color:var(--success); }
+  .pill.warn{ background:var(--warn-soft); color:var(--warn); }
+  .pill.neutral{ background:var(--line); color:var(--ink-soft); }
+
+  .row-actions{ display:flex; gap:6px; justify-content:flex-end; }
+
+  .table-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 4px 6px; font-size:12.5px; color:var(--ink-soft);
+  }
+
+  /* Modals */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(12,20,16,0.5); backdrop-filter:blur(2px);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--panel); border-radius:18px; width:440px; max-width:100%;
+    padding:24px; box-shadow:0 30px 60px -20px rgba(0,0,0,0.35); max-height:90vh; overflow-y:auto;
+  }
+  .modal h3{ margin:0 0 4px; font-size:16px; font-weight:700; }
+  .modal .sub{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; }
+  .modal .info-row{
+    display:flex; justify-content:space-between; font-size:12.5px;
+    padding:8px 0; border-bottom:1px solid var(--line);
+  }
+  .modal .info-row .k{ color:var(--ink-soft); }
+  .modal .info-row .v{ font-weight:700; }
+  .modal label{ font-size:12px; font-weight:600; color:var(--ink); display:block; margin:12px 0 6px; }
+  .modal textarea, .modal .modal-input{
+    width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 12px;
+    font-family:inherit; font-size:13px; outline:none; background:var(--bg);
+  }
+  .modal textarea:focus, .modal .modal-input:focus{
+    border-color:var(--green); background:#fff;
+  }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:20px; }
+
+  /* Toast */
+  .toast{
+    position:fixed; bottom:24px; right:24px; background:var(--green-dark); color:#fff;
+    padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2); z-index:200; display:none; align-items:center; gap:8px;
+  }
+  .toast.show{ display:flex; }
+
+  /* Education cards */
+  .edu-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:14px; }
+  .edu-card{ background:#FAFBFA; border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .edu-card h4{ margin:0 0 6px; font-size:13.5px; font-weight:700; color:var(--green-dark); }
+  .edu-card p{ margin:0; font-size:12px; color:var(--ink-soft); line-height:1.55; }
+
+  .script-box{
+    background:#FAFBFA; border:1px solid var(--line); border-radius:12px; padding:16px; margin-top:12px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  }
+  .script-box p{ margin:6px 0 0; font-family:monospace; font-size:12px; color:#2A3B34; line-height:1.5; }
+  .script-tag{ font-size:10.5px; font-weight:800; background:var(--green-soft); color:var(--green); padding:2px 8px; border-radius:6px; }
+
+  @media (max-width:1100px){
+    .stats-row{ grid-template-columns:repeat(2,1fr); }
+    .ai-split-grid{ grid-template-columns:1fr; }
+    .edu-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:800px){
+    .app{ grid-template-columns:1fr; }
+    .sidebar{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast">
+  <span>Tindakan berhasil</span>
+</div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">T</div>
+      <div>
+        <div class="name">Tring Dashboard</div>
+        <div class="sub">Pegadaian · Petugas</div>
+      </div>
+    </div>
+    <nav class="menu" id="navMenu">
+      <div class="nav-item active" onclick="switchSection('section-overview')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="15" width="7" height="6" rx="1.5"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="switchSection('section-table')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.8 14.7c2.5.3 4.2 2.2 4.2 5"/></svg>
+        Data Nasabah
+      </div>
+      <div class="nav-item" onclick="switchSection('section-education')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6.5 12 3l9 3.5-9 3.5-9-3.5Z"/><path d="M7 9.5V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V9.5"/></svg>
+        Edukasi & Skrip
+      </div>
+      <div class="nav-item" onclick="switchSection('section-followup')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+        Jadwal Follow Up
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <strong>Tring Closing System</strong><br>
+      v1.0 · Standalone Ready<br>
+      PT Pegadaian (Persero)
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <h1>Tring Closing Dashboard</h1>
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="topSearch" placeholder="Cari nasabah, nomor HP...">
+      </div>
+      <div class="topbar-right">
+        <button class="btn sm" onclick="exportCSV()" title="Ekspor data ke CSV Excel">
+          📥 Unduh CSV
+        </button>
+        <div class="profile">
+          <div class="avatar">SM</div>
+          <div class="who">
+            <div class="n">Syaifullah Maulana</div>
+            <div class="r">Petugas Front Office</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- SECTION 1: OVERVIEW -->
+      <div id="section-overview">
+        <!-- STAT CARDS -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="top-row">
+              <div>
+                <div class="label">Total Nasabah Tring</div>
+                <div class="value" id="statTotal">--</div>
+              </div>
+              <div class="stat-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.8 14.7c2.5.3 4.2 2.2 4.2 5"/></svg>
+              </div>
+            </div>
+            <div class="delta up">▲ 8% dari bulan lalu</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top-row">
+              <div>
+                <div class="label">Tring Aktif Digunakan</div>
+                <div class="value" id="statClosing">--</div>
+              </div>
+              <div class="stat-icon gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4-5 4 3 6-8"/><path d="M3 20h18"/></svg>
+              </div>
+            </div>
+            <div class="delta up" id="statTringPct">--</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top-row">
+              <div>
+                <div class="label">Tabungan Emas Terbuka</div>
+                <div class="value" id="statOpened">--</div>
+              </div>
+              <div class="stat-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5 11 15l4.5-5.5"/></svg>
+              </div>
+            </div>
+            <div class="delta up" id="statOpenedPct">--</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top-row">
+              <div>
+                <div class="label">Follow Up Pending</div>
+                <div class="value" id="statPending">--</div>
+              </div>
+              <div class="stat-icon warn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+              </div>
+            </div>
+            <div class="delta down" id="statOverdueNote">Tenggat tindak lanjut</div>
+          </div>
+        </div>
+
+        <!-- AI INSIGHT -->
+        <div class="panel" style="margin-top:20px;">
+          <h2>AI Insight — Analisis Tabungan Emas <span class="badge">AKTIF</span></h2>
+          <div class="desc">Ringkasan otomatis dan saran taktis untuk petugas front office mengonversi nasabah.</div>
+
+          <div class="ai-split-grid">
+            <div class="ai-bar-wrap">
+              <div class="row"><span>Sudah Membuka Rekening Emas</span><span class="n" id="aiOpenedN">--</span></div>
+              <div class="bar-track"><div class="bar-fill opened" id="aiOpenedBar" style="width:0%"></div></div>
+            </div>
+            <div class="ai-bar-wrap">
+              <div class="row"><span>Belum Membuka (Potensi Closing)</span><span class="n" id="aiNotOpenedN">--</span></div>
+              <div class="bar-track"><div class="bar-fill notopened" id="aiNotOpenedBar" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="ai-insight-text" id="aiInsightText">Menghitung insight nasabah...</div>
+
+          <div class="ai-actions">
+            <button class="btn ghost-warn sm" onclick="filterByEmas('Belum Membuka')">Lihat Nasabah Belum Membuka</button>
+            <button class="btn ghost-success sm" onclick="filterByEmas('Sudah Membuka')">Lihat Nasabah Sudah Membuka</button>
+            <button class="btn sm" onclick="switchSection('section-education')">Buka Skrip Edukasi WA</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: DATA NASABAH TABLE -->
+      <div class="panel table-panel" id="section-table">
+        <div class="table-head">
+          <div>
+            <h2 style="margin-bottom:2px;">Data Nasabah & Follow Up</h2>
+            <div class="desc" style="margin-bottom:0;">Pantau status Tring dan Tabungan Emas per nasabah secara langsung</div>
+          </div>
+          <div class="table-controls">
+            <div class="table-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="tableSearch" placeholder="Cari nama, no HP...">
+            </div>
+            <select class="filter-select" id="filterTring">
+              <option value="">Semua Status Tring</option>
+              <option value="Belum Menggunakan">Belum Menggunakan</option>
+              <option value="Sudah Menggunakan">Sudah Menggunakan</option>
+            </select>
+            <select class="filter-select" id="filterEmas">
+              <option value="">Semua Tabungan Emas</option>
+              <option value="Sudah Membuka">Sudah Membuka</option>
+              <option value="Belum Membuka">Belum Membuka</option>
+            </select>
+            <button class="btn primary" onclick="openNasabahForm(null)">+ Tambah Nasabah</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Nasabah</th>
+                <th>Status Tring</th>
+                <th>Status Tabungan Emas</th>
+                <th>Tanggal Follow Up</th>
+                <th>Petugas PIC</th>
+                <th style="text-align:right;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="table-foot">
+          <span id="tableCount">-- nasabah ditampilkan</span>
+          <span>Data tersimpan otomatis di browser (LocalStorage)</span>
+        </div>
+      </div>
+
+      <!-- SECTION 3: EDUKASI & SKRIP CLOSING -->
+      <div class="panel" id="section-education">
+        <h2>Pusat Edukasi & Skrip Closing Petugas Front Office</h2>
+        <div class="desc">Materi edukasi keunggulan Tabungan Emas di Tring dan template chat WhatsApp siap pakai</div>
+
+        <div class="edu-grid">
+          <div class="edu-card">
+            <h4>1. Investasi Mulai Rp 10.000</h4>
+            <p>Emas 24K bersertifikasi. Nasabah tidak harus membeli 1 gram langsung, melainkan dapat menabung bertahap mulai 0.01 gram lewat aplikasi Tring.</p>
+          </div>
+          <div class="edu-card">
+            <h4>2. Bebas Biaya Fasilitas Titipan</h4>
+            <p>Promo khusus nasabah Pegadaian: Gratis biaya titipan untuk 1 tahun pertama sejak tanggal pembukaan rekening Tabungan Emas.</p>
+          </div>
+          <div class="edu-card">
+            <h4>3. Fisik Emas Terjamin 100%</h4>
+            <p>Emas tersimpan aman di vault Pegadaian dan dapat dicetak menjadi kepingan logam mulia Antam/UBS kapan saja nasabah menginginkannya.</p>
+          </div>
+        </div>
+
+        <div class="script-box">
+          <div>
+            <span class="script-tag">Template 1: Hook Pembukaan (WhatsApp)</span>
+            <p id="script1">Selamat siang Bapak/Ibu [Nama], terima kasih sudah bertransaksi di Pegadaian. Kami ingin mengabarkan fitur terbaru di aplikasi Tring: kini Bapak/Ibu bisa menabung emas 24 karat mulai Rp 10.000 saja dan mendapatkan promo Bebas Biaya Titipan tahun pertama. Mau saya pandu aktivasinya dalam 2 menit lewat aplikasi?</p>
+          </div>
+          <button class="btn sm" onclick="copyText('script1')">Salin Teks</button>
+        </div>
+
+        <div class="script-box">
+          <div>
+            <span class="script-tag">Template 2: Jawaban Keberatan Uang Belum Cukup</span>
+            <p id="script2">Baik Bapak/Ibu, justru Tabungan Emas Pegadaian dirancang agar kita tidak perlu modal besar. Dengan menyisihkan receh Rp 15.000/hari di Tring, otomatis terkonversi jadi gram emas yang tahan inflasi. Akunnya bisa dibuka dulu sekarang tanpa saldo mengendap.</p>
+          </div>
+          <button class="btn sm" onclick="copyText('script2')">Salin Teks</button>
+        </div>
+      </div>
+
+      <!-- SECTION 4: FOLLOW UP WORKFLOW -->
+      <div class="panel" id="section-followup">
+        <h2>Antrean & Riwayat Follow Up</h2>
+        <div class="desc">Daftar nasabah prioritas untuk dihubungi hari ini oleh petugas</div>
+        <div id="followUpList" style="display:flex; flex-direction:column; gap:10px; margin-top:14px;"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <h3 id="detailName">-</h3>
+    <div class="sub" id="detailSub">-</div>
+    <div class="info-row"><span class="k">Nomor HP / WhatsApp</span><span class="v" id="detailPhone">-</span></div>
+    <div class="info-row"><span class="k">Status Tring</span><span class="v" id="detailTring">-</span></div>
+    <div class="info-row"><span class="k">Status Tabungan Emas</span><span class="v" id="detailEmas">-</span></div>
+    <div class="info-row"><span class="k">Saldo Emas</span><span class="v" id="detailGold">-</span></div>
+    <div class="info-row"><span class="k">Tanggal Follow Up</span><span class="v" id="detailFU">-</span></div>
+    <div class="info-row"><span class="k">Petugas PIC</span><span class="v" id="detailPetugas">-</span></div>
+    <div style="margin-top:14px;">
+      <span style="font-size:12px; color:var(--ink-soft); display:block; margin-bottom:4px;">Catatan:</span>
+      <div id="detailNotes" style="font-size:12.5px; background:var(--bg); padding:10px; border-radius:8px; line-height:1.5;">-</div>
+    </div>
+    <div class="modal-actions">
+      <a id="detailWaBtn" href="#" target="_blank" class="btn sm ghost-success" style="margin-right:auto;">Chat WhatsApp</a>
+      <button class="btn" onclick="closeModal('detailModal')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOLLOW UP MODAL -->
+<div class="modal-overlay" id="fuModal">
+  <div class="modal">
+    <h3>Catat Follow Up Nasabah</h3>
+    <div class="sub" id="fuName">-</div>
+
+    <label>Hasil / Respon Nasabah</label>
+    <select class="modal-input" id="fuOutcome">
+      <option value="Tertarik">Tertarik (Minta info lebih lanjut)</option>
+      <option value="Closing Tabungan Emas">Closing Tabungan Emas 🎉</option>
+      <option value="Ragu-ragu">Ragu-ragu (Perlu diedukasi kembali)</option>
+      <option value="Belum Terhubung">Belum Terhubung / Tidak Diangkat</option>
+      <option value="Menolak">Belum Berminat</option>
+    </select>
+
+    <label>Jadwal Tindak Lanjut Berikutnya</label>
+    <select class="modal-input" id="fuDatePreset">
+      <option value="1">Besok</option>
+      <option value="3">3 Hari Lagi</option>
+      <option value="7">1 Minggu Lagi</option>
+      <option value="0">Hari Ini</option>
+    </select>
+
+    <label>Catatan Interaksi</label>
+    <textarea id="fuNoteText" rows="3" placeholder="Contoh: Sudah ditelepon, nasabah minta dikirimkan brosur via WA dan akan verifikasi akun besok sore..."></textarea>
+
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('fuModal')">Batal</button>
+      <button class="btn primary" id="fuSaveBtn">Simpan Catatan</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAMBAH / EDIT NASABAH MODAL -->
+<div class="modal-overlay" id="nasabahModal">
+  <div class="modal">
+    <h3 id="nasabahModalTitle">Tambah Nasabah</h3>
+    <div class="sub">Lengkapi identitas dan status nasabah Pegadaian</div>
+
+    <label>Nama Lengkap Nasabah *</label>
+    <input type="text" class="modal-input" id="nasabahNama" placeholder="Nama lengkap">
+
+    <label>Nomor HP / WhatsApp *</label>
+    <input type="text" class="modal-input" id="nasabahPhone" placeholder="08xxxxxxxxxx">
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div>
+        <label>Status Tring</label>
+        <select class="modal-input" id="nasabahTring">
+          <option value="Belum Menggunakan">Belum Menggunakan</option>
+          <option value="Sudah Menggunakan">Sudah Menggunakan</option>
+        </select>
+      </div>
+      <div>
+        <label>Tabungan Emas</label>
+        <select class="modal-input" id="nasabahEmas">
+          <option value="Belum Membuka">Belum Membuka</option>
+          <option value="Sudah Membuka">Sudah Membuka</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div>
+        <label>Tanggal Follow Up</label>
+        <input type="date" class="modal-input" id="nasabahFollowUp">
+      </div>
+      <div>
+        <label>Petugas PIC</label>
+        <select class="modal-input" id="nasabahPetugas"></select>
+      </div>
+    </div>
+
+    <label>Catatan Transaksi / Kebiasaan Gadai</label>
+    <textarea id="nasabahNotes" rows="2" class="modal-input" placeholder="Contoh: Rutin tebus gadai, tertarik menabung emas..."></textarea>
+
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('nasabahModal')">Batal</button>
+      <button class="btn primary" id="nasabahSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- DATA & STORAGE ---------- */
+const petugasList = ["Syaifullah Maulana","Fadli Ramadhan","Nadia Putri","Yoga Saputra"];
+const STORAGE_KEY = "tring_dashboard_customers_v1";
+
+const DEFAULT_CUSTOMERS = [
+  {
+    "id": 2,
+    "name": "vhfnuhnv",
+    "phone": "7487747889838",
+    "tring": "Belum Menggunakan",
+    "emas": "Belum Membuka",
+    "followUp": "2026-10-02",
+    "petugas": "Syaifullah Maulana",
+    "goldGram": 0,
+    "notes": ""
+  },
+  {
+    "id": 1,
+    "name": "dfgh",
+    "phone": "082296463015",
+    "tring": "Belum Menggunakan",
+    "emas": "Belum Membuka",
+    "followUp": "2026-10-02",
+    "petugas": "Syaifullah Maulana",
+    "goldGram": 0,
+    "notes": ""
+  }
+];
+
+let customers = [];
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  customers = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_CUSTOMERS));
+} catch(e) {
+  customers = JSON.parse(JSON.stringify(DEFAULT_CUSTOMERS));
+}
+
+function saveStore(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(customers)); } catch(e){}
+  renderStats();
+  renderTable();
+  renderFollowUpList();
+}
+
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(()=> el.classList.remove("show"), 3000);
+}
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+/* ---------- STATS & AI INSIGHT ---------- */
+function renderStats(){
+  const total = customers.length;
+  const closing = customers.filter(c=>c.tring==="Sudah Menggunakan").length;
+  const opened = customers.filter(c=>c.emas==="Sudah Membuka").length;
+  const notOpened = total - opened;
+  const today = todayStr();
+  const pending = customers.filter(c=> c.followUp >= today).length;
+  const overdue = customers.filter(c=> c.followUp < today && c.emas === "Belum Membuka").length;
+
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statClosing").textContent = closing;
+  document.getElementById("statTringPct").textContent = "▲ " + (total ? Math.round(closing/total*100) : 0) + "% konversi";
+  document.getElementById("statOpened").textContent = opened;
+  document.getElementById("statOpenedPct").textContent = (total ? Math.round(opened/total*100) : 0) + "% dari total nasabah";
+  document.getElementById("statPending").textContent = pending;
+  document.getElementById("statOverdueNote").textContent = overdue > 0 ? (overdue + " overdue perlu tindak lanjut") : "Semua follow up tepat waktu";
+
+  const openedPct = total ? Math.round(opened/total*100) : 0;
+  const notOpenedPct = total ? 100 - openedPct : 0;
+  document.getElementById("aiOpenedN").textContent = opened + " nasabah (" + openedPct + "%)";
+  document.getElementById("aiNotOpenedN").textContent = notOpened + " nasabah (" + notOpenedPct + "%)";
+  document.getElementById("aiOpenedBar").style.width = openedPct + "%";
+  document.getElementById("aiNotOpenedBar").style.width = notOpenedPct + "%";
+
+  document.getElementById("aiInsightText").textContent = total === 0
+    ? "Belum ada data nasabah. Tambahkan nasabah untuk mulai melihat insight."
+    : opened + " nasabah (" + openedPct + "%) sudah membuka Tabungan Emas, sedangkan " + notOpened + " nasabah (" + notOpenedPct + "%) masih berpotensi besar untuk di-closing. " +
+      (overdue > 0 ? "Terdapat " + overdue + " nasabah yang jadwal follow up-nya lewat, prioritaskan edukasi promo gratis fasilitas titipan tahun pertama via WhatsApp." : "Jadwal follow-up terjaga rapi. Fokuskan edukasi autodebet tabungan emas di aplikasi Tring.");
+}
+
+/* ---------- TABLE RENDERING ---------- */
+let activeFilters = { search:"", tring:"", emas:"" };
+
+function pillHtml(type, text, onclickAttr){
+  const cls = type === "success" ? "success" : "warn";
+  return '<span class="pill dot ' + cls + '" ' + (onclickAttr || '') + ' title="Klik untuk ubah cepat status">' + text + '</span>';
+}
+
+function getWaUrl(phone, name){
+  const clean = phone.replace(/^0/, '62').replace(/\D/g, '');
+  const msg = encodeURIComponent("Halo Bapak/Ibu " + name + ", salam hangat dari Pegadaian. Kami ingin mengabarkan promo menarik Tabungan Emas via aplikasi Tring: bebas biaya fasilitas titipan tahun pertama dan mulai menabung dari Rp 10.000. Apakah ada waktu luang hari ini untuk kami bantu aktivasinya? Terima kasih.");
+  return "https://wa.me/" + clean + "?text=" + msg;
+}
+
+function renderTable(){
+  const body = document.getElementById("tableBody");
+  const q = activeFilters.search.toLowerCase();
+  const filtered = customers.filter(c=>{
+    if(q && !c.name.toLowerCase().includes(q) && !c.phone.includes(q)) return false;
+    if(activeFilters.tring && c.tring !== activeFilters.tring) return false;
+    if(activeFilters.emas && c.emas !== activeFilters.emas) return false;
+    return true;
+  });
+
+  if(filtered.length === 0){
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:36px 0; color:var(--ink-faint);">Tidak ada data nasabah yang cocok.</td></tr>';
+    document.getElementById("tableCount").textContent = "0 dari " + customers.length + " nasabah ditampilkan";
+    return;
+  }
+
+  body.innerHTML = filtered.map(c=>`
+    <tr>
+      <td>
+        <div class="cust-name">${c.name}</div>
+        <div class="cust-sub">${c.phone}</div>
+      </td>
+      <td>${pillHtml(c.tring === "Sudah Menggunakan" ? "success" : "warn", c.tring, 'onclick="toggleTring(' + c.id + ')"')}</td>
+      <td>${pillHtml(c.emas === "Sudah Membuka" ? "success" : "warn", c.emas, 'onclick="toggleEmas(' + c.id + ')"')}</td>
+      <td>
+        <span style="font-family:monospace; font-size:12px;">${c.followUp}</span>
+        ${c.followUp < todayStr() && c.emas === "Belum Membuka" ? '<span style="display:block; font-size:10.5px; color:var(--danger); font-weight:700;">Jatuh Tempo</span>' : ''}
+      </td>
+      <td>${c.petugas}</td>
+      <td>
+        <div class="row-actions">
+          <a href="${getWaUrl(c.phone, c.name)}" target="_blank" class="btn sm ghost-success" title="Chat WhatsApp">WA</a>
+          <button class="btn sm" onclick="openDetail(${c.id})">Detail</button>
+          <button class="btn sm" onclick="openNasabahForm(${c.id})">Edit</button>
+          <button class="btn sm primary" onclick="openFollowUp(${c.id})">Follow Up</button>
+          <button class="btn sm" style="color:var(--danger); border-color:#f1c2b8;" onclick="deleteNasabah(${c.id})" title="Hapus nasabah">Hapus</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+
+  document.getElementById("tableCount").textContent = filtered.length + " dari " + customers.length + " nasabah ditampilkan";
+}
+
+function deleteNasabah(id){
+  const idx = customers.findIndex(x=>x.id===id);
+  if(idx !== -1){
+    const name = customers[idx].name;
+    customers.splice(idx, 1);
+    saveStore();
+    toast("Nasabah " + name + " berhasil dihapus");
+  }
+}
+
+function toggleTring(id){
+  const c = customers.find(x=>x.id===id);
+  if(c){
+    c.tring = c.tring === "Sudah Menggunakan" ? "Belum Menggunakan" : "Sudah Menggunakan";
+    saveStore();
+    toast("Status Tring " + c.name + " diperbarui");
+  }
+}
+function toggleEmas(id){
+  const c = customers.find(x=>x.id===id);
+  if(c){
+    c.emas = c.emas === "Sudah Membuka" ? "Belum Membuka" : "Sudah Membuka";
+    if(c.emas === "Sudah Membuka" && (!c.goldGram || c.goldGram === 0)) c.goldGram = 0.05;
+    saveStore();
+    toast("Status Tabungan Emas " + c.name + " diperbarui");
+  }
+}
+
+/* ---------- FOLLOW UP LIST ---------- */
+function renderFollowUpList(){
+  const container = document.getElementById("followUpList");
+  if(!container) return;
+  const today = todayStr();
+  const sorted = [...customers].sort((a,b)=> a.followUp.localeCompare(b.followUp));
+
+  container.innerHTML = sorted.map(c=>{
+    const isOverdue = c.followUp < today && c.emas === "Belum Membuka";
+    return `
+      <div style="background:#fff; border:1px solid ${isOverdue ? '#F2C6BE' : 'var(--line)'}; border-radius:12px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:700; font-size:13.5px; display:flex; align-items:center; gap:8px;">
+            ${c.name}
+            ${isOverdue ? '<span style="font-size:10px; background:#FDF2F0; color:#B4432E; padding:2px 8px; border-radius:10px; font-weight:800;">JATUH TEMPO</span>' : ''}
+          </div>
+          <div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+            ${c.phone} · Jadwal: <strong>${c.followUp}</strong> · PIC: ${c.petugas}
+          </div>
+          <div style="font-size:11.5px; color:#495852; margin-top:4px;">${c.notes || '-'}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <a href="${getWaUrl(c.phone, c.name)}" target="_blank" class="btn sm ghost-success">Chat WA</a>
+          <button class="btn sm primary" onclick="openFollowUp(${c.id})">Catat Follow Up</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* ---------- MODALS ---------- */
+function closeModal(id){
+  document.getElementById(id).classList.remove("open");
+}
+function openDetail(id){
+  const c = customers.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById("detailName").textContent = c.name;
+  document.getElementById("detailSub").textContent = "ID Nasabah #" + String(c.id).padStart(4,"0");
+  document.getElementById("detailPhone").textContent = c.phone;
+  document.getElementById("detailTring").textContent = c.tring;
+  document.getElementById("detailEmas").textContent = c.emas;
+  document.getElementById("detailGold").textContent = (c.goldGram || 0) + " Gram Emas Murni";
+  document.getElementById("detailFU").textContent = c.followUp;
+  document.getElementById("detailPetugas").textContent = c.petugas;
+  document.getElementById("detailNotes").textContent = c.notes || "Tidak ada catatan khusus.";
+  document.getElementById("detailWaBtn").href = getWaUrl(c.phone, c.name);
+  document.getElementById("detailModal").classList.add("open");
+}
+
+let activeFuId = null;
+function openFollowUp(id){
+  const c = customers.find(x=>x.id===id);
+  if(!c) return;
+  activeFuId = id;
+  document.getElementById("fuName").textContent = c.name + " (" + c.phone + ")";
+  document.getElementById("fuNoteText").value = "";
+  document.getElementById("fuModal").classList.add("open");
+}
+
+document.getElementById("fuSaveBtn").addEventListener("click", ()=>{
+  const c = customers.find(x=>x.id===activeFuId);
+  if(c){
+    const outcome = document.getElementById("fuOutcome").value;
+    const days = Number(document.getElementById("fuDatePreset").value);
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    c.followUp = d.toISOString().slice(0,10);
+    const note = document.getElementById("fuNoteText").value.trim();
+    if(note) c.notes = note;
+    if(outcome === "Closing Tabungan Emas"){
+      c.emas = "Sudah Membuka";
+      if(!c.goldGram) c.goldGram = 0.1;
+    }
+    saveStore();
+    toast("Catatan follow up disimpan!");
+  }
+  closeModal("fuModal");
+});
+
+/* ---------- NASABAH FORM ---------- */
+const petugasSelect = document.getElementById("nasabahPetugas");
+petugasSelect.innerHTML = petugasList.map(p=>`<option value="${p}">${p}</option>`).join("");
+
+let editingId = null;
+function openNasabahForm(id){
+  editingId = id;
+  const isEdit = !!id;
+  document.getElementById("nasabahModalTitle").textContent = isEdit ? "Edit Data Nasabah" : "Tambah Nasabah";
+
+  const c = isEdit ? customers.find(x=>x.id===id) : null;
+  document.getElementById("nasabahNama").value = c ? c.name : "";
+  document.getElementById("nasabahPhone").value = c ? c.phone : "";
+  document.getElementById("nasabahTring").value = c ? c.tring : "Belum Menggunakan";
+  document.getElementById("nasabahEmas").value = c ? c.emas : "Belum Membuka";
+  document.getElementById("nasabahFollowUp").value = c ? c.followUp : todayStr();
+  document.getElementById("nasabahNotes").value = c ? (c.notes || "") : "";
+  petugasSelect.value = c ? c.petugas : petugasList[0];
+
+  document.getElementById("nasabahModal").classList.add("open");
+}
+
+document.getElementById("nasabahSaveBtn").addEventListener("click", ()=>{
+  const name = document.getElementById("nasabahNama").value.trim();
+  const phone = document.getElementById("nasabahPhone").value.trim();
+  if(!name || !phone){ alert("Nama dan Nomor HP wajib diisi"); return; }
+
+  const payload = {
+    name,
+    phone,
+    tring: document.getElementById("nasabahTring").value,
+    emas: document.getElementById("nasabahEmas").value,
+    followUp: document.getElementById("nasabahFollowUp").value || todayStr(),
+    petugas: petugasSelect.value,
+    notes: document.getElementById("nasabahNotes").value.trim(),
+    goldGram: document.getElementById("nasabahEmas").value === "Sudah Membuka" ? 0.1 : 0
+  };
+
+  if(editingId){
+    const c = customers.find(x=>x.id===editingId);
+    if(c) Object.assign(c, payload);
+    toast("Data nasabah berhasil diperbarui");
+  } else {
+    const nextId = customers.length > 0 ? Math.max(...customers.map(c=>c.id)) + 1 : 1;
+    customers.unshift({ id: nextId, ...payload });
+    toast("Nasabah baru berhasil ditambahkan");
+  }
+
+  saveStore();
+  closeModal("nasabahModal");
+});
+
+/* ---------- EXPORT CSV ---------- */
+function exportCSV(){
+  let csv = "ID,Nama Nasabah,Nomor HP,Status Tring,Status Tabungan Emas,Jadwal Follow Up,Petugas PIC,Catatan\n";
+  customers.forEach(c=>{
+    csv += '"' + c.id + '","' + c.name + '","' + c.phone + '","' + c.tring + '","' + c.emas + '","' + c.followUp + '","' + c.petugas + '","' + (c.notes||'').replace(/"/g, '""') + '"\n';
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Data_Nasabah_Tring_Pegadaian_" + todayStr() + ".csv";
+  a.click();
+  toast("File CSV berhasil diunduh!");
+}
+
+function copyText(id){
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text);
+  toast("Teks skrip berhasil disalin!");
+}
+
+function filterByEmas(status){
+  document.getElementById("filterEmas").value = status;
+  activeFilters.emas = status;
+  renderTable();
+  document.getElementById("section-table").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function switchSection(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* Event listeners */
+document.getElementById("tableSearch").addEventListener("input", e=>{
+  activeFilters.search = e.target.value; renderTable();
+});
+document.getElementById("topSearch").addEventListener("input", e=>{
+  document.getElementById("tableSearch").value = e.target.value;
+  activeFilters.search = e.target.value; renderTable();
+  document.getElementById("section-table").scrollIntoView({behavior:"smooth", block:"start"});
+});
+document.getElementById("filterTring").addEventListener("change", e=>{
+  activeFilters.tring = e.target.value; renderTable();
+});
+document.getElementById("filterEmas").addEventListener("change", e=>{
+  activeFilters.emas = e.target.value; renderTable();
+});
+
+// Close modal when clicking outside
+document.querySelectorAll(".modal-overlay").forEach(ov=>{
+  ov.addEventListener("click", e=>{ if(e.target === ov) ov.classList.remove("open"); });
+});
+
+/* INIT */
+renderStats();
+renderTable();
+renderFollowUpList();
+</script>
+</body>
+</html>
